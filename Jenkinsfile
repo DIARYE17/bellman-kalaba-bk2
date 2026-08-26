@@ -21,8 +21,9 @@ pipeline {
         }
         stage("Deploy") {
             steps {
-                echo "=== Simulation du Déploiement ==="
-                echo "L'application React est prête dans le dossier dist !"
+                echo "=== Déploiement réel sur le serveur local Node.js ==="
+                bat 'powershell -Command "Stop-Process -Name node -ErrorAction SilentlyContinue"'
+                bat 'start /B serve -s dist -l 5000'
             }
         }
     }
