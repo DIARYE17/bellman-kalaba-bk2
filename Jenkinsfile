@@ -22,7 +22,9 @@ pipeline {
         stage("Deploy") {
             steps {
                 echo "=== Déploiement réel sur le serveur local Node.js ==="
-                bat 'powershell -Command "Stop-Process -Name node -ErrorAction SilentlyContinue"'
+                // Arrête les anciennes instances de serve sur le port 5000 s'il y en a, sans planter si aucun processus n'existe
+                bat 'taskkill /F /IM node.exe /FI "WINDOWTITLE eq serve*" 2>NUL || cmd /c exit 0'
+                // Lance le serveur web statique en arrière-plan sur le port 5000
                 bat 'start /B serve -s dist -l 5000'
             }
         }
