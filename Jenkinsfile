@@ -19,14 +19,14 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: false
             }
         }
-      stage("Deploy") {
-    steps {
-        echo "=== Déploiement en arrière-plan ==="
-        // 1. Libère le port 5000 sans bloquer
-        bat 'powershell -Command "Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force"'
-        // 2. Démarre serve de manière totalement indépendante de Jenkins
-        bat 'powershell -Command "Start-Process serve -ArgumentList \'-s dist -l 5000\' -WindowStyle Hidden"'
-    }
-}
+        stage("Deploy") {
+            steps {
+                echo "=== Déploiement en arrière-plan ==="
+                // Arrête les processus node existants sans faire échouer le script s'il n'y en a pas
+                bat 'powershell -Command "Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force"'
+                // Lance le serveur web via cmd /c start pour détacher le processus
+                bat 'cmd /c start /B npx serve -s dist -l 5000'
+            }
+        }
     }
 }
