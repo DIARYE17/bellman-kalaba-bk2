@@ -22,11 +22,11 @@ pipeline {
         stage("Deploy") {
             steps {
                 echo "=== Déploiement du serveur local ==="
-                // Libération du port 5000 s'il est utilisé
+                // Libération du port 5000
                 bat 'cmd /c "for /f \"tokens=5\" %a in (\'netstat -aon ^| findstr :5000 ^| findstr LISTENING\') do taskkill /f /pid %a" 2>NUL || cmd /c exit 0'
                 
-                // Lancement du serveur avec la variable d'environnement PowerShell $env:WORKSPACE
-                bat 'powershell -Command "Start-Process cmd -ArgumentList \'/c npx serve -s $env:WORKSPACE\\dist -l 5000\' -WindowStyle Hidden"'
+                // Lancement de serve directement en ciblant le dossier dist du workspace
+                bat 'powershell -Command "Start-Process cmd -ArgumentList \'/c npx serve -s C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Pipeline-Bellman-Kalaba\\dist -l 5000\' -WindowStyle Hidden"'
             }
         }
     }
