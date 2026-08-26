@@ -13,5 +13,17 @@ pipeline {
                 bat "npm run build"
             }
         }
+        stage("Archive Artifacts") {
+            steps {
+                echo "=== Sauvegarde du dossier dist ==="
+                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: false
+            }
+        }
+        stage("Deploy") {
+            steps {
+                echo "=== Simulation du Déploiement ==="
+                echo "L'application React est prête dans le dossier dist !"
+            }
+        }
     }
 }
