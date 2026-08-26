@@ -1,4 +1,3 @@
-@'
 pipeline {
     agent any
     stages {
@@ -16,4 +15,3 @@ pipeline {
         }
     }
 }
-'@ | Out-File -FilePath .\Jenkinsfile -Encoding utf8
