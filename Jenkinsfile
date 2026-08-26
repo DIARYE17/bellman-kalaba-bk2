@@ -1,10 +1,10 @@
-pipeline {
+Set-Content -Path .\Jenkinsfile -Value 'pipeline {
     agent any
     stages {
-        stage("Checkout & Clean") {
+        stage("Install Dependencies") {
             steps {
-                echo "=== Nettoyage du workspace ==="
-                cleanWs()
+                echo "=== Installation des dépendances ==="
+                bat "npm install"
             }
         }
         stage("Build") {
@@ -14,4 +14,4 @@ pipeline {
             }
         }
     }
-}
+}'
