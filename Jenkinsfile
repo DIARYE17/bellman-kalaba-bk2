@@ -1,4 +1,5 @@
-Set-Content -Path .\Jenkinsfile -Value 'pipeline {
+@'
+pipeline {
     agent any
     stages {
         stage("Install Dependencies") {
@@ -14,4 +15,5 @@ Set-Content -Path .\Jenkinsfile -Value 'pipeline {
             }
         }
     }
-}'
+}
+'@ | Out-File -FilePath .\Jenkinsfile -Encoding utf8
