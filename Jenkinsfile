@@ -21,12 +21,9 @@ pipeline {
         }
         stage("Deploy") {
             steps {
-                echo "=== Déploiement du serveur local ==="
-                // Libère uniquement le port 5000 s'il est occupé sans toucher aux autres processus Node
+                echo "=== Déploiement local ==="
                 bat 'cmd /c "for /f \"tokens=5\" %a in (\'netstat -aon ^| findstr :5000 ^| findstr LISTENING\') do taskkill /f /pid %a" 2>NUL || cmd /c exit 0'
-                
-                // Lancement du serveur statique en arrière-plan détaché
-                bat 'start "React-App" /B npx http-server dist -p 5000'
+                bat 'powershell -Command "Start-Process cmd -ArgumentList \'/c npx serve -s dist -l 5000\' -WindowStyle Hidden"'
             }
         }
     }
