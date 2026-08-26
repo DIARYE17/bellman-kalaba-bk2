@@ -15,18 +15,18 @@ pipeline {
         }
         stage("Archive Artifacts") {
             steps {
-                echo "=== Sauvegarde du dossier dist ==="
+                echo "=== Sauvegarde des fichiers dist ==="
                 archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: false
             }
         }
         stage("Deploy") {
             steps {
-                echo "=== Déploiement du serveur local ==="
-                // 1. Libère le port 5000 s'il est utilisé
+                echo "=== Déploiement via serveur Python ==="
+                // 1. Libère le port 5000 s'il est déjà occupé
                 bat 'cmd /c "for /f \"tokens=5\" %a in (\'netstat -aon ^| findstr :5000 ^| findstr LISTENING\') do taskkill /f /pid %a" 2>NUL || cmd /c exit 0'
                 
-                // 2. Lance npx serve directement dans le dossier dist du workspace Jenkins via start /b
-                bat 'cmd /c "set JENKINS_NODE_COOKIE=dontKillMe && start /b npx serve -s C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\Pipeline-Bellman-Kalaba\\dist -l 5000"'
+                // 2. Se déplace dans dist et lance le serveur HTTP natif de Python
+                bat 'set JENKINS_NODE_COOKIE=dontKillMe && cd dist && start /b python -m http.server 5000'
             }
         }
     }
