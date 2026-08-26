@@ -19,14 +19,14 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: false
             }
         }
-        stage("Deploy") {
-            steps {
-                echo "=== Déploiement réel sur le serveur local Node.js ==="
-                // Arrête les anciennes instances de serve sur le port 5000 s'il y en a, sans planter si aucun processus n'existe
-                bat 'taskkill /F /IM node.exe /FI "WINDOWTITLE eq serve*" 2>NUL || cmd /c exit 0'
-                // Lance le serveur web statique en arrière-plan sur le port 5000
-                bat 'start /B serve -s dist -l 5000'
-            }
-        }
+      stage("Deploy") {
+    steps {
+        echo "=== Déploiement en arrière-plan ==="
+        // 1. Libère le port 5000 sans bloquer
+        bat 'powershell -Command "Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force"'
+        // 2. Démarre serve de manière totalement indépendante de Jenkins
+        bat 'powershell -Command "Start-Process serve -ArgumentList \'-s dist -l 5000\' -WindowStyle Hidden"'
+    }
+}
     }
 }
