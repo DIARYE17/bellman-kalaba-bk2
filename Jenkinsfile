@@ -18,62 +18,64 @@ stages {
         }
     }
 
-    stage("Analyse du projet") {
-        steps {
-            echo "=== Analyse automatique du projet ==="
+  stage("Analyse du projet") {
+    steps {
+        echo "=== Analyse automatique du projet ==="
 
-            powershell '''
-                Write-Host "========================================"
-                Write-Host "   ANALYSE DU PROJET BELLMAN-KALABA"
-                Write-Host "========================================"
+        powershell '''
+            Write-Host "========================================"
+            Write-Host "   ANALYSE DU PROJET BELLMAN-KALABA"
+            Write-Host "========================================"
 
-                Write-Host ""
-                Write-Host "--- Versions ---"
-                node --version
-                npm --version
+            Write-Host ""
+            Write-Host "--- Versions ---"
+            node --version
+            npm --version
 
-                Write-Host ""
-                Write-Host "--- Analyse des dependances ---"
-                npm list --depth=0
+            Write-Host ""
+            Write-Host "--- Analyse des dependances ---"
+            npm list --depth=0
 
-                Write-Host ""
-                Write-Host "--- Audit de securite ---"
-                npm audit --json | Out-File -FilePath npm-audit.json -Encoding utf8
+            Write-Host ""
+            Write-Host "--- Audit de securite ---"
+            npm audit --json | Out-File -FilePath npm-audit.json -Encoding utf8
 
-                Write-Host ""
-                Write-Host "--- Analyse du dossier dist ---"
+            Write-Host ""
+            Write-Host "--- Analyse du dossier dist ---"
 
-                $files = Get-ChildItem -Path "dist" -Recurse -File
-                $fileCount = $files.Count
+            $files = Get-ChildItem -Path "dist" -Recurse -File
+            $fileCount = $files.Count
 
-                if ($fileCount -gt 0) {
-                    $totalSize = ($files | Measure-Object -Property Length -Sum).Sum
-                    $totalSizeKB = [math]::Round($totalSize / 1KB, 2)
-                }
-                else {
-                    $totalSizeKB = 0
-                }
+            if ($fileCount -gt 0) {
+                $totalSize = ($files | Measure-Object -Property Length -Sum).Sum
+                $totalSizeKB = [math]::Round($totalSize / 1KB, 2)
+            }
+            else {
+                $totalSizeKB = 0
+            }
 
-                Write-Host "Nombre de fichiers : $fileCount"
-                Write-Host "Taille totale      : $totalSizeKB KB"
+            Write-Host "Nombre de fichiers : $fileCount"
+            Write-Host "Taille totale      : $totalSizeKB KB"
 
-                Write-Host ""
-                Write-Host "--- Fichiers JavaScript ---"
-                Get-ChildItem -Path "dist" -Recurse -Filter "*.js" -File |
-                    Select-Object Name, Length
+            Write-Host ""
+            Write-Host "--- Fichiers JavaScript ---"
+            Get-ChildItem -Path "dist" -Recurse -Filter "*.js" -File |
+                Select-Object Name, Length
 
-                Write-Host ""
-                Write-Host "--- Fichiers CSS ---"
-                Get-ChildItem -Path "dist" -Recurse -Filter "*.css" -File |
-                    Select-Object Name, Length
+            Write-Host ""
+            Write-Host "--- Fichiers CSS ---"
+            Get-ChildItem -Path "dist" -Recurse -Filter "*.css" -File |
+                Select-Object Name, Length
 
-                Write-Host ""
-                Write-Host "========================================"
-                Write-Host "        FIN DE L'ANALYSE"
-                Write-Host "========================================"
-            '''
-        }
+            Write-Host ""
+            Write-Host "========================================"
+            Write-Host "        FIN DE L'ANALYSE"
+            Write-Host "========================================"
+
+            exit 0
+        '''
     }
+}
 
     stage("Generation du rapport") {
         steps {
