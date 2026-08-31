@@ -29,16 +29,12 @@ stages {
             echo "Demarrage de l'application React"
 
             bat '''
-                @echo off
-
-                for /f "tokens=5" %%a in ('netstat -aon ^| findstr :5000 ^| findstr LISTENING') do (
-                    taskkill /f /pid %%a >nul 2>&1
-                )
-
-                start "React Server" /b npx serve -s dist -l 5000
+                cd dist
+                start "React Server" /b python -m http.server 5000
             '''
         }
     }
 }
+
 
 }
