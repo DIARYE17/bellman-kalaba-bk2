@@ -72,7 +72,6 @@ stages {
                 "$dependencies = (Get-Content package.json | ConvertFrom-Json).dependencies.PSObject.Properties.Count; ^
                 "$devDependencies = (Get-Content package.json | ConvertFrom-Json).devDependencies.PSObject.Properties.Count; ^
                 "$html = @'
-```
 
 <!DOCTYPE html>
 
@@ -201,7 +200,6 @@ Le projet est pret pour le deploiement.
             }
         }
 
-```
     stage("Archive Artifacts") {
         steps {
             echo "=== Archivage des resultats ==="
