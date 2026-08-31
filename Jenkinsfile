@@ -23,22 +23,5 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: false
             }
         }
-
-        stage("Deploy") {
-            steps {
-                echo "=== Demarrage du serveur ==="
-
-                bat '''
-                    @echo off
-                    for /f "tokens=5" %%a in ('netstat -aon ^| findstr :5000 ^| findstr LISTENING') do (
-                        taskkill /f /pid %%a >nul 2>&1
-                    )
-
-                    set JENKINS_NODE_COOKIE=dontKillMe
-                    cd dist
-                    start /b python -m http.server 5000
-                '''
-            }
-        }
     }
 }
