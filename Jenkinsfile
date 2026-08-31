@@ -1,6 +1,7 @@
 pipeline {
 agent any
 
+```
 stages {
 
     stage("Install Dependencies") {
@@ -26,14 +27,20 @@ stages {
 
     stage("Serve Application") {
         steps {
-            echo "Demarrage du serveur"
+            echo "Demarrage de l'application React"
 
             bat '''
-                cd dist
-                start /b python -m http.server 5000
+                @echo off
+
+                for /f "tokens=5" %%a in ('netstat -aon ^| findstr :5000 ^| findstr LISTENING') do (
+                    taskkill /f /pid %%a >nul 2>&1
+                )
+
+                start "React Server" /b npx serve -s dist -l 5000
             '''
         }
     }
 }
+```
 
 }
