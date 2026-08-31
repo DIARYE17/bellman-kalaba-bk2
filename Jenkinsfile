@@ -1,7 +1,6 @@
 pipeline {
 agent any
 
-```
 stages {
 
     stage("Install Dependencies") {
@@ -41,6 +40,5 @@ stages {
         }
     }
 }
-```
 
 }
