@@ -132,7 +132,6 @@ stages {
                 }
 
                 $html = @"
-```
 
 <!DOCTYPE html>
 
@@ -302,7 +301,6 @@ Rapport généré automatiquement par Jenkins.
 </html>
 "@
 
-```
                 Set-Content `
                     -Path "rapport-analyse.html" `
                     -Value $html `
