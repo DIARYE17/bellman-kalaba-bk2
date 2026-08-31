@@ -1,6 +1,7 @@
 pipeline {
 agent any
 
+
 stages {
 
     stage("Install Dependencies") {
@@ -23,18 +24,6 @@ stages {
             archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: false
         }
     }
-
-    stage("Serve Application") {
-        steps {
-            echo "Demarrage de l'application React"
-
-            bat '''
-                cd dist
-                start "React Server" /b python -m http.server 5000
-            '''
-        }
-    }
 }
-
 
 }
